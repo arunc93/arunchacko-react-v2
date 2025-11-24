@@ -1,0 +1,112 @@
+/* Your actual design – colors, animations, components */
+:root {
+  --bg-solid: #ffffff;
+  --text: #1e293b;
+  --accent: #6d28d9;
+  --gradient: linear-gradient(90deg, #6d28d9, #3b82f6);
+}
+
+.dark {
+  --bg-solid: #0f172a;
+  --text: #e2e8f0;
+  --accent: #c4b5fd;
+  --gradient: linear-gradient(90deg, #a78bfa, #60a5fa);
+}
+
+.app {
+  min-height: 100vh;
+  background: var(--bg-solid);
+  color: var(--text);
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* Fix body background */
+html,
+body,
+#root,
+.app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: transparent !important;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+/* Restore the beautiful gradient underline */
+
+/* Gradient underline – now works perfectly in both modes */
+.nav-link {
+  position: relative;
+  color: var(--text) !important;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -6px;
+  left: 50%;
+  background: var(--gradient);
+  transition: width 0.4s ease;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.nav-link:hover {
+  color: var(--accent) !important;
+  transform: translateY(-2px);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Rest of your styles (h1, buttons, etc.) */
+.main-content h1 {
+  font-size: 2.8rem;
+  margin-bottom: 1rem;
+  background: var(--gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Main content */
+.main-content {
+  max-width: 800px;
+  margin: 120px auto 2rem;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+.main-content p {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.cta-button {
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: var(--gradient);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(109, 40, 217, 0.3);
+}

@@ -1,0 +1,41 @@
+.intro-main-content h1 {
+  font-size: 2.8rem;
+  margin-bottom: 1rem;
+  /* Apply gradient background to heading text */
+  /* background: var(--gradient);*/
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Main content */
+.intro-main-content {
+  max-width: 800px;
+  margin: 120px auto 2rem;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+.intro-main-content p {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.cta-button {
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: var(--gradient);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(109, 40, 217, 0.3);
+}
