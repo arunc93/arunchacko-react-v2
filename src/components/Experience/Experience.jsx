@@ -25,7 +25,7 @@ const Experience = ({ isDarkMode, toggleTheme }) => {
   return (
     <section
       style={{
-        padding: "100px 5%",
+        padding: "50px 5%",
         textAlign: "center",
         //background: "var(--bg-solid)",
         color: "var(--text)",

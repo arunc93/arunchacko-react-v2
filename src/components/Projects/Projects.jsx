@@ -11,6 +11,8 @@ const Projects = ({ isDarkMode }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const isMobile = windowWidth <= 1000;
+
   const projects = [
     {
       title: "Online Cinema",
@@ -45,7 +47,6 @@ const Projects = ({ isDarkMode }) => {
       }}
     >
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-        {/* Title */}
         <h2
           style={{
             fontSize: "3.2rem",
@@ -61,181 +62,198 @@ const Projects = ({ isDarkMode }) => {
           Projects
         </h2>
 
-        {/* Projects List */}
         <div style={{ display: "flex", flexDirection: "column", gap: "10rem" }}>
-          {projects.map((project, index) => (
-            <div
-              key={index}
-              style={{
-                display: "grid",
-                gridTemplateColumns: windowWidth <= 900 ? "1fr" : "1fr 1fr",
-                gap: windowWidth <= 900 ? "3rem" : "6rem",
-                alignItems: "center", // This is the key fix!
-                minHeight: windowWidth <= 900 ? "auto" : "500px", // Consistent height
-              }}
-            >
-              {/* Image */}
-              <div
-                style={{
-                  order: index % 2 === 1 && windowWidth > 900 ? 2 : 1,
-                  justifySelf:
-                    windowWidth <= 900
-                      ? "center"
-                      : index % 2 === 1
-                      ? "start"
-                      : "end",
-                }}
-              >
-                <div
-                  style={{
-                    width: windowWidth <= 900 ? "90%" : "500px",
-                    height: "340px",
-                    background: "#0f172a",
-                    borderRadius: "28px",
-                    boxShadow: "0 25px 60px rgba(0,0,0,0.4)",
-                    border: "1px solid rgba(139,92,246,0.15)",
-                    backgroundImage: `ur[](https://source.unsplash.com/random/800x600?project,screen,${index})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    position: "relative",
-                    overflow: "hidden",
-                  }}
-                >
+          {projects.map((project, index) => {
+            const imageOnLeft = index % 2 === 0;
+
+            return (
+              <div key={index}>
+                {/* MOBILE: Image on top, full width */}
+                {isMobile && (
                   <div
                     style={{
-                      position: "absolute",
-                      inset: 0,
-                      background:
-                        "linear-gradient(135deg, rgba(139,92,246,0.15), transparent 70%)",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "3.5rem",
+                      alignItems: "center",
                     }}
-                  />
-                </div>
+                  >
+                    <ImagePlaceholder />
+                    <TextContent
+                      project={project}
+                      isMobile={true}
+                      isDarkMode={isDarkMode}
+                    />
+                  </div>
+                )}
+
+                {/* DESKTOP: Alternating layout */}
+                {!isMobile && (
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "540px 1fr",
+                      gap: "6rem",
+                      alignItems: "center",
+                      direction: imageOnLeft ? "ltr" : "rtl", // This is the magic
+                    }}
+                  >
+                    <ImagePlaceholder />
+                    <TextContent
+                      project={project}
+                      isMobile={false}
+                      isDarkMode={isDarkMode}
+                    />
+                  </div>
+                )}
               </div>
-
-              {/* Text Content */}
-              <div
-                style={{
-                  order: index % 2 === 1 && windowWidth > 900 ? 1 : 2,
-                  maxWidth: "540px",
-                  padding: windowWidth <= 900 ? "0 1rem" : 0,
-                  justifySelf:
-                    windowWidth <= 900
-                      ? "center"
-                      : index % 2 === 1
-                      ? "end"
-                      : "start",
-                }}
-              >
-                {/* Tags */}
-                <div
-                  style={{
-                    marginBottom: "1rem",
-                    display: "flex",
-                    gap: "0.8rem",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      style={{
-                        fontSize: "0.85rem",
-                        padding: "0.5rem 1.1rem",
-                        borderRadius: "30px",
-                        border: `1px solid ${
-                          isDarkMode
-                            ? "rgba(139,92,246,0.4)"
-                            : "rgba(109,40,217,0.3)"
-                        }`,
-                        background: isDarkMode
-                          ? "rgba(139,92,246,0.1)"
-                          : "rgba(109,40,217,0.05)",
-                        color: "var(--text)",
-                        fontWeight: 500,
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                <h3
-                  style={{
-                    fontSize: "2.4rem",
-                    fontWeight: 700,
-                    margin: "0.5rem 0 0.3rem",
-                  }}
-                >
-                  {project.title}
-                </h3>
-                <p
-                  style={{
-                    fontSize: "1rem",
-                    opacity: 0.7,
-                    marginBottom: "1.2rem",
-                  }}
-                >
-                  {project.date}
-                </p>
-
-                <p
-                  style={{
-                    fontSize: "1.15rem",
-                    lineHeight: "1.75",
-                    margin: "1.5rem 0",
-                    opacity: 0.9,
-                  }}
-                >
-                  {project.desc}
-                </p>
-
-                <p
-                  style={{
-                    fontSize: "0.95rem",
-                    opacity: 0.7,
-                    margin: "1.2rem 0 2rem",
-                  }}
-                >
-                  Technologies:{" "}
-                  <strong style={{ color: "var(--accent)" }}>
-                    {project.tech}
-                  </strong>
-                </p>
-
-                {/* CTA Button */}
-                <button
-                  style={{
-                    padding: "0.9rem 2.4rem",
-                    fontSize: "1.1rem",
-                    fontWeight: 600,
-                    border: "none",
-                    borderRadius: "50px",
-                    background: "var(--gradient)",
-                    color: "white",
-                    cursor: "pointer",
-                    boxShadow: "0 10px 30px rgba(109,40,217,0.3)",
-                    transition: "all 0.3s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = "translateY(-4px)";
-                    e.target.style.boxShadow =
-                      "0 15px 35px rgba(109,40,217,0.4)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = "translateY(0)";
-                    e.target.style.boxShadow =
-                      "0 10px 30px rgba(109,40,217,0.3)";
-                  }}
-                >
-                  See more
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
   );
 };
+
+// Reusable Image Placeholder
+const ImagePlaceholder = () => (
+  <div
+    style={{
+      width: "100%",
+      height: "360px",
+      background: "#0f172a",
+      borderRadius: "32px",
+      boxShadow: "0 25px 60px rgba(0,0,0,0.45)",
+      border: "1px solid rgba(139,92,246,0.2)",
+      position: "relative",
+      overflow: "hidden",
+      // Uncomment when ready:
+      // backgroundImage: `url(/images/projects/your-image.jpg)`,
+      // backgroundSize: "cover",
+      // backgroundPosition: "center",
+    }}
+  >
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        background:
+          "linear-gradient(135deg, rgba(139,92,246,0.28) 0%, transparent 60%)",
+      }}
+    />
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "rgba(255,255,255,0.08)",
+        fontSize: "4.5rem",
+        fontWeight: "bold",
+        letterSpacing: "8px",
+      }}
+    >
+      PROJECT
+    </div>
+  </div>
+);
+
+// Reusable Text Content
+const TextContent = ({ project, isMobile, isDarkMode }) => (
+  <div
+    style={{
+      maxWidth: "560px",
+      textAlign: isMobile ? "center" : "left",
+      padding: isMobile ? "0 1rem" : 0,
+    }}
+  >
+    <div
+      style={{
+        marginBottom: "1rem",
+        display: "flex",
+        gap: "0.8rem",
+        flexWrap: "wrap",
+        justifyContent: isMobile ? "center" : "flex-start",
+      }}
+    >
+      {project.tags.map((tag) => (
+        <span
+          key={tag}
+          style={{
+            fontSize: "0.85rem",
+            padding: "0.5rem 1.2rem",
+            borderRadius: "30px",
+            border: `1px solid ${
+              isDarkMode ? "rgba(139,92,246,0.4)" : "rgba(109,40,217,0.3)"
+            }`,
+            background: isDarkMode
+              ? "rgba(139,92,246,0.1)"
+              : "rgba(109,40,217,0.05)",
+            color: "var(--text)",
+            fontWeight: 500,
+          }}
+        >
+          {tag}
+        </span>
+      ))}
+    </div>
+
+    <h3
+      style={{
+        fontSize: "2.6rem",
+        fontWeight: 700,
+        margin: "0.5rem 0 0.4rem",
+        lineHeight: 1.1,
+      }}
+    >
+      {project.title}
+    </h3>
+    <p style={{ fontSize: "1rem", opacity: 0.7, marginBottom: "1.4rem" }}>
+      {project.date}
+    </p>
+    <p
+      style={{
+        fontSize: "1.18rem",
+        lineHeight: "1.8",
+        margin: "1.6rem 0",
+        opacity: 0.92,
+      }}
+    >
+      {project.desc}
+    </p>
+    <p
+      style={{ fontSize: "0.98rem", opacity: 0.75, margin: "1.4rem 0 2.2rem" }}
+    >
+      Technologies:{" "}
+      <strong style={{ color: "var(--accent)" }}>{project.tech}</strong>
+    </p>
+
+    <button
+      style={{
+        padding: "0.95rem 2.6rem",
+        fontSize: "1.12rem",
+        fontWeight: 600,
+        border: "none",
+        borderRadius: "50px",
+        background: "var(--gradient)",
+        color: "white",
+        cursor: "pointer",
+        boxShadow: "0 10px 30px rgba(109,40,217,0.3)",
+        transition: "all 0.3s ease",
+      }}
+      onMouseEnter={(e) => {
+        e.target.style.transform = "translateY(-5px)";
+        e.target.style.boxShadow = "0 18px 40px rgba(109,40,217,0.4)";
+      }}
+      onMouseLeave={(e) => {
+        e.target.style.transform = "translateY(0)";
+        e.target.style.boxShadow = "0 10px 30px rgba(109,40,217,0.3)";
+      }}
+    >
+      See more
+    </button>
+  </div>
+);
 
 export default Projects;

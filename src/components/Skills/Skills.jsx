@@ -1,28 +1,51 @@
 import React, { useState } from "react";
 
+// Import all PNG icons from your folder
+import figma from "../../assets/skills/figma.png";
+import ae from "../../assets/skills/ae.png";
+import ps from "../../assets/skills/ps.png";
+import ai from "../../assets/skills/ai.png";
+import pr from "../../assets/skills/pr.png";
+import id from "../../assets/skills/id.png";
+import ppt from "../../assets/skills/ppt.png";
+import da from "../../assets/skills/da.png"; // Adobe XD
+import react from "../../assets/skills/14react.png";
+import js from "../../assets/skills/13js.png";
+import node from "../../assets/skills/15node.png";
+import html from "../../assets/skills/11html.png";
+import css from "../../assets/skills/12css.png";
+// Optional extras you can add later:
+// import docker from "./assets/skills/docker.png";
+// import git from "./assets/skills/git.png";
+// etc.
+
 const Skills = ({ isDarkMode, toggleTheme }) => {
   const [activeTab, setActiveTab] = useState("design");
 
   const designSkills = [
-    { name: "Figma", isFigma: true },
-    { name: "After Effects", short: "Ae", color: "#9966FF" },
-    { name: "Photoshop", short: "Ps", color: "#31C5E0" },
-    { name: "Illustrator", short: "Ai", color: "#FF9A00" },
-    { name: "Premiere Pro", short: "Pr", color: "#EA77FF" },
-    { name: "InDesign", short: "Id", color: "#FF5276" },
-    { name: "PowerPoint", short: "Pp", color: "#D43F2A" },
-    { name: "XD", short: "Xd", color: "#FF2BC2" },
+    { name: "Figma", icon: figma },
+    { name: "After Effects", icon: ae },
+    { name: "Photoshop", icon: ps },
+    { name: "Illustrator", icon: ai },
+    { name: "Premiere Pro", icon: pr },
+    { name: "InDesign", icon: id },
+    { name: "PowerPoint", icon: ppt },
+    { name: "Adobe XD", icon: da },
   ];
 
   const techSkills = [
-    { name: "React", short: "React", color: "#61DAFB" },
-    { name: "JavaScript", short: "JS", color: "#F7DF1E" },
-    { name: "TypeScript", short: "TS", color: "#3178C6" },
-    { name: "Next.js", short: "Next", color: "#FFFFFF" },
-    { name: "Node.js", short: "Node", color: "#8CC84B" },
-    { name: "Git", short: "Git", color: "#F05032" },
-    { name: "Docker", short: "Docker", color: "#2496ED" },
-    { name: "Firebase", short: "Fire", color: "#FFCA28" },
+    { name: "HTML", icon: html },
+    { name: "CSS", icon: css },
+    { name: "JavaScript", icon: js },
+    { name: "React", icon: react },
+
+    { name: "Node.js", icon: node },
+    // Add more when you get their icons:
+    // { name: "TypeScript", icon: ts },
+    // { name: "Next.js", icon: nextjs },
+    // { name: "Git", icon: git },
+    // { name: "Docker", icon: docker },
+    // { name: "Firebase", icon: firebase },
   ];
 
   const skills = activeTab === "design" ? designSkills : techSkills;
@@ -30,14 +53,24 @@ const Skills = ({ isDarkMode, toggleTheme }) => {
   return (
     <section
       style={{
-        padding: "100px 24px",
-        //background: "#0f172a",
+        padding: "50px 24px",
         background: "var(--bg-solid)",
-        minHeight: "100vh",
+        minHeight: "70vh",
         fontFamily:
           "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
       }}
     >
+      {/* Top Line */}
+      <div
+        style={{
+          width: "100px",
+          height: "2px",
+          background: "var(--gradient)",
+          margin: "0 auto 4rem",
+          borderRadius: "2px",
+        }}
+      />
+
       <div
         style={{ maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}
       >
@@ -45,17 +78,17 @@ const Skills = ({ isDarkMode, toggleTheme }) => {
           style={{
             fontSize: "56px",
             fontWeight: "800",
-            color: "white",
             marginBottom: "60px",
             background: "var(--gradient)",
             backgroundClip: "text",
-            color: "transparent",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
           }}
         >
           Skills
         </h2>
 
-        {/* Perfectly Centered Toggle - Fixed! */}
+        {/* Toggle */}
         <div
           style={{
             display: "flex",
@@ -66,9 +99,7 @@ const Skills = ({ isDarkMode, toggleTheme }) => {
           <div
             style={{
               position: "relative",
-              //background: "#1e293b",
               background: "var(--gradient)",
-
               borderRadius: "50px",
               padding: "8px",
               display: "inline-flex",
@@ -76,7 +107,6 @@ const Skills = ({ isDarkMode, toggleTheme }) => {
               overflow: "hidden",
             }}
           >
-            {/* Moving Purple Pill - Perfectly Aligned */}
             <div
               style={{
                 position: "absolute",
@@ -84,9 +114,7 @@ const Skills = ({ isDarkMode, toggleTheme }) => {
                 left: "8px",
                 width: "120px",
                 height: "48px",
-                background:
-                  "linear-gradient(135deg,rgb(166, 87, 245), rgb(166, 87, 245)",
-                //background: "var(--gradient)",
+                background: "rgb(166, 87, 245)",
                 borderRadius: "50px",
                 boxShadow: "0 8px 20px rgba(167, 139, 250, 0.5)",
                 transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
@@ -124,7 +152,6 @@ const Skills = ({ isDarkMode, toggleTheme }) => {
                 padding: "14px 0",
                 fontSize: "15px",
                 fontWeight: "600",
-                //color: activeTab === "tech" ? "white" : "#94a3b8",
                 color: activeTab === "tech" ? "white" : "var(--accent)",
                 background: "transparent",
                 border: "none",
@@ -138,7 +165,7 @@ const Skills = ({ isDarkMode, toggleTheme }) => {
           </div>
         </div>
 
-        {/* Skills Grid - Responsive & Centered */}
+        {/* Skills Grid */}
         <div
           style={{
             display: "grid",
@@ -183,87 +210,39 @@ const Skills = ({ isDarkMode, toggleTheme }) => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "28px",
-                  fontWeight: "bold",
-                  color: skill.color || "#e2e8f0",
                   boxShadow: "0 10px 25px rgba(0,0,0,0.25)",
                   transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
                   overflow: "hidden",
+                  padding: "8px",
                 }}
               >
-                {skill.isFigma ? (
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "48px",
-                      height: "48px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "24px",
-                        height: "24px",
-                        background: "#f97316",
-                        borderRadius: "12px 0 0 0",
-                      }}
-                    ></div>
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        right: 0,
-                        width: "24px",
-                        height: "24px",
-                        background: "#a78bfa",
-                        borderRadius: "0 12px 0 0",
-                      }}
-                    ></div>
-                    <div
-                      style={{
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        width: "24px",
-                        height: "24px",
-                        background: "#f43f5e",
-                        borderRadius: "0 0 0 12px",
-                      }}
-                    ></div>
-                    <div
-                      style={{
-                        position: "absolute",
-                        bottom: 0,
-                        right: 0,
-                        width: "24px",
-                        height: "24px",
-                        background: "#06b6d4",
-                        borderRadius: "0 0 12px 0",
-                      }}
-                    ></div>
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        width: "24px",
-                        height: "24px",
-                        background: "#10b981",
-                        borderRadius: "50%",
-                      }}
-                    ></div>
-                  </div>
-                ) : (
-                  skill.short
-                )}
+                <img
+                  src={skill.icon}
+                  alt={skill.name}
+                  style={{
+                    width: "60%",
+                    height: "60%",
+                    objectFit: "contain",
+                    //borderRadius: "16px",
+                  }}
+                  loading="lazy"
+                />
               </div>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Bottom Line */}
+      <div
+        style={{
+          width: "100px",
+          height: "2px",
+          background: "var(--gradient)",
+          margin: "4rem auto 0",
+          borderRadius: "2px",
+        }}
+      />
     </section>
   );
 };

@@ -32,9 +32,10 @@ const HireMe = ({ isDarkMode, toggleTheme }) => {
   return (
     <section
       style={{
-        padding: "180px 24px",
+        padding: "40px 24px",
         background: "var(--bg-solid)",
-        minHeight: "100vh",
+        //minHeight: "100vh",
+        minHeight: "65vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
