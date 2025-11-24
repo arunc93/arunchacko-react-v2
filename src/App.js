@@ -5,6 +5,8 @@ import Intro from "./components/Intro/Intro.jsx";
 import Experience from "./components/Experience/Experience.jsx";
 import Projects from "./components/Projects/Projects.jsx";
 import Intro02 from "./components/Intro02/Intro02.jsx";
+import Skills from "./components/Skills/Skills.jsx";
+import HireMe from "./components/HireMe/HireMe.jsx";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -26,6 +28,8 @@ function App() {
       {/* <Intro isDarkMode={isDarkMode} toggleTheme={toggleTheme} /> */}
       <Experience isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
       <Projects isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
+      <Skills isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
+      <HireMe isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
     </div>
   );
 }

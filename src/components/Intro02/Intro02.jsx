@@ -290,7 +290,7 @@ const Intro02 = ({ isDarkMode, toggleTheme }) => {
             letterSpacing: "0.8px",
           }}
         >
-          I'm Arun Chacko
+          I'm Arun
         </p>
         <h1
           style={{

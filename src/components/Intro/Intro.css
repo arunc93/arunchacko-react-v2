@@ -2,7 +2,7 @@
   font-size: 2.8rem;
   margin-bottom: 1rem;
   /* Apply gradient background to heading text */
-  /* background: var(--gradient);*/
+  background: var(--gradient);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
