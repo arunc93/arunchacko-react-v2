@@ -1,6 +1,7 @@
 {
   "name": "arunchacko-react-v2",
   "version": "0.1.0",
+  "homepage": "https://arunc93.github.io/arunchacko-react-v2",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
