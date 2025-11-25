@@ -12,21 +12,25 @@ const HireMe = ({ isDarkMode, toggleTheme }) => {
   const socialLinks = [
     {
       name: "Behance",
-      href: "https://behance.net/yourusername",
+      href: "https://behance.net/arunc93",
       icon: behanceIcon,
     },
-    { name: "X", href: "https://x.com/yourusername", icon: twitterIcon },
+    { name: "X", href: "https://x.com/thearunchacko", icon: twitterIcon },
     {
       name: "GitHub",
-      href: "https://dribbble.com/yourusername",
+      href: "https://github.com/arunc93",
       icon: githubIcon,
     },
     {
       name: "LinkedIn",
-      href: "https://linkedin.com/in/yourusername",
+      href: "https://www.linkedin.com/in/thearunchacko/",
       icon: linkedinIcon,
     },
-    { name: "YouTube", href: "https://yourportfolio.com", icon: youtubeIcon },
+    {
+      name: "YouTube",
+      href: "https://www.youtube.com/arunchacko",
+      icon: youtubeIcon,
+    },
   ];
 
   return (
@@ -77,7 +81,8 @@ const HireMe = ({ isDarkMode, toggleTheme }) => {
         </p>
 
         <a
-          href="mailto:hello@yourname.com"
+          //href="mailto:hello@yourname.com"
+          href="https://www.linkedin.com/messaging/compose/?recipient=thearunchacko"
           style={{
             display: "inline-block",
             padding: "18px 48px",

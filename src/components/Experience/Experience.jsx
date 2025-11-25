@@ -79,7 +79,11 @@ const Experience = ({ isDarkMode, toggleTheme }) => {
           <div
             key={company.name}
             style={{
-              background: "rgba(240, 240, 245, 0.7)",
+              //background: "rgba(234, 234, 234, 0.7)",#8b5cf6
+              //background: "rgba(193, 160, 238, 0.46)",
+              background: isDarkMode
+                ? "rgba(139,92,246,0.1)"
+                : "rgba(109,40,217,0.05)",
               backdropFilter: "blur(10px)",
               borderRadius: "20px",
               padding: "3rem 2rem",
@@ -105,19 +109,20 @@ const Experience = ({ isDarkMode, toggleTheme }) => {
               src={company.logo}
               alt={`${company.name} logo`}
               style={{
-                height: "40px", // adjust this value to make logos bigger/smaller
+                height: "auto", // adjust this value to make logos bigger/smaller
                 width: "auto",
-                maxWidth: "150px",
+                maxWidth: "85%",
+                maxHeight: "65px",
                 objectFit: "contain",
-                filter: "grayscale(20%)", // optional: subtle grayscale
+                //filter: "grayscale(20%)", // optional: subtle grayscale
+
+                filter: isDarkMode
+                  ? "brightness(0.8) invert(1) grayscale(0.3)"
+                  : "none",
                 transition: "filter 0.4s ease",
               }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.filter = "grayscale(0%)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.filter = "grayscale(20%)")
-              }
+              //onMouseEnter={(e) =>(e.currentTarget.style.filter ="brightness(0.8)  grayscale(0.3)")}
+              //onMouseLeave={(e) =>(e.currentTarget.style.filter ="brightness(0.8)  grayscale(0.3)")}
             />
 
             {/* Optional: show company name below the logo */}

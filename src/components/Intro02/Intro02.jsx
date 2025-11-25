@@ -1,13 +1,31 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import {
   forceSimulation,
   forceManyBody,
   forceLink,
   forceCenter,
-  forceCollide, // ← Fixed: renamed from forceCollision in D3 v7+
+  forceCollide,
 } from "d3-force";
 
-const Intro02 = ({ isDarkMode, toggleTheme }) => {
+// We use forwardRef + useImperativeHandle so App.jsx can scroll to this section
+const Intro02 = forwardRef(({ isDarkMode, onViewProjects }, ref) => {
+  const sectionRef = useRef(null);
+
+  // Expose the section ref to parent (App.jsx) so it can scroll to it
+  useImperativeHandle(ref, () => ({
+    scrollIntoView: (options) => {
+      sectionRef.current?.scrollIntoView(options);
+    },
+    getElement: () => sectionRef.current,
+  }));
+
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
@@ -17,14 +35,14 @@ const Intro02 = ({ isDarkMode, toggleTheme }) => {
   const simulationRef = useRef(null);
   const draggedNodeRef = useRef(null);
 
-  // Handle window resize
+  // === HANDLE WINDOW RESIZE ===
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Generate network graph (downward-curved shape)
+  // === GENERATE NETWORK GRAPH ===
   useEffect(() => {
     const generateNetwork = () => {
       const newNodes = [];
@@ -95,7 +113,7 @@ const Intro02 = ({ isDarkMode, toggleTheme }) => {
     generateNetwork();
   }, [windowWidth]);
 
-  // Run force simulation
+  // === RUN D3 FORCE SIMULATION ===
   useEffect(() => {
     if (nodes.length === 0) return;
 
@@ -109,37 +127,46 @@ const Intro02 = ({ isDarkMode, toggleTheme }) => {
           .distance(10)
           .strength((l) => l.strength || 0.7)
       )
-      .force("charge", forceManyBody().strength(-60))
-      .force("collision", forceCollide().radius(76)) // or 28–32 if you go with r="10–12"
-      .force("center", forceCenter(width * 0.5, height * 0.95)) // 75% from left = right side
-      .velocityDecay(0.99) // ← This stops rotation & drifting
-      .on("tick", () => {
-        // This creates a new array reference → forces React to re-render
-        setNodes((nodes) => [...nodes]); // ← Fixed line (ESLint happy)
-      });
+      .force("charge", forceManyBody().strength(-40))
+      .force("collision", forceCollide().radius(26))
+      .force("center", forceCenter(width * 0.5, height * 0.75))
+      .velocityDecay(0.99)
+      .on("tick", () => setNodes((nodes) => [...nodes]));
 
-    return () => {
-      simulationRef.current?.stop();
-    };
+    return () => simulationRef.current?.stop();
   }, [nodes, links, windowWidth]);
 
-  // Draggable nodes (mouse + touch support)
+  // === PERFECT DRAG BEHAVIOR (Mouse + Touch) ===
   const handleMouseDown = useCallback(
     (node) => (e) => {
       e.stopPropagation();
-      e.preventDefault();
+      if (e.type !== "touchstart") e.preventDefault();
 
-      node.fx = node.x;
-      node.fy = node.y;
+      const svg = svgRef.current;
+      if (!svg) return;
+
+      const point = svg.createSVGPoint();
+      const getPointerPos = (ev) => {
+        const x = ev.touches ? ev.touches[0].clientX : ev.clientX;
+        const y = ev.touches ? ev.touches[0].clientY : ev.clientY;
+        point.x = x;
+        point.y = y;
+        return point.matrixTransform(svg.getScreenCTM().inverse());
+      };
+
+      const { x, y } = getPointerPos(e);
+      node.fx = x;
+      node.fy = y;
       draggedNodeRef.current = node;
+      simulationRef.current?.alpha(1).restart();
 
       const handleMove = (moveE) => {
-        const { clientX, clientY } = moveE.touches ? moveE.touches[0] : moveE;
-        if (draggedNodeRef.current) {
-          draggedNodeRef.current.fx = clientX;
-          draggedNodeRef.current.fy = clientY;
-          simulationRef.current?.alpha(0.3).restart();
-        }
+        if (!draggedNodeRef.current) return;
+        if (moveE.touches) moveE.preventDefault();
+        const pos = getPointerPos(moveE);
+        draggedNodeRef.current.fx = pos.x;
+        draggedNodeRef.current.fy = pos.y;
+        simulationRef.current?.alpha(0.3).restart();
       };
 
       const handleUp = () => {
@@ -152,19 +179,21 @@ const Intro02 = ({ isDarkMode, toggleTheme }) => {
         window.removeEventListener("mouseup", handleUp);
         window.removeEventListener("touchmove", handleMove);
         window.removeEventListener("touchend", handleUp);
+        window.removeEventListener("touchcancel", handleUp);
       };
 
       window.addEventListener("mousemove", handleMove);
       window.addEventListener("mouseup", handleUp);
       window.addEventListener("touchmove", handleMove, { passive: false });
       window.addEventListener("touchend", handleUp);
+      window.addEventListener("touchcancel", handleUp);
     },
     []
   );
 
+  // === ROTATING WORD COMPONENT ===
   const RotatingWord = ({ word, index, total }) => {
     const currentIndex = Math.floor(Date.now() / 3000) % total;
-
     if (index !== currentIndex) return null;
 
     return (
@@ -177,7 +206,7 @@ const Intro02 = ({ isDarkMode, toggleTheme }) => {
           color: "transparent",
           display: "inline-block",
           whiteSpace: "nowrap",
-          paddingRight: "0.15em", // makes room for the period to sit perfectly
+          paddingRight: "0.15em",
         }}
       >
         {word}
@@ -189,6 +218,7 @@ const Intro02 = ({ isDarkMode, toggleTheme }) => {
 
   return (
     <section
+      ref={sectionRef} // This is what allows smooth scroll from navbar
       style={{
         minHeight: "100vh",
         position: "relative",
@@ -196,13 +226,12 @@ const Intro02 = ({ isDarkMode, toggleTheme }) => {
         alignItems: "center",
         justifyContent: "center",
         padding: "0 1.5rem",
-        background: isDarkMode
-          ? "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)"
-          : "var(--bg-solid)",
+        background: "var(--bg-solid)",
         overflow: "hidden",
+        scrollMarginTop: "90px", // Prevents navbar from covering content
       }}
     >
-      {/* Interactive Node Background */}
+      {/* === INTERACTIVE NODE BACKGROUND === */}
       <svg
         ref={svgRef}
         style={{
@@ -214,9 +243,9 @@ const Intro02 = ({ isDarkMode, toggleTheme }) => {
           pointerEvents: "none",
           zIndex: 1,
           opacity: 0.18,
+          touchAction: "none",
         }}
       >
-        {/* Gradient Definition */}
         <defs>
           <linearGradient
             id="gradient-line"
@@ -263,14 +292,18 @@ const Intro02 = ({ isDarkMode, toggleTheme }) => {
             opacity="0.7"
             stroke="#c4b5fd"
             strokeWidth="1.5"
-            style={{ pointerEvents: "all", cursor: "grab" }}
+            style={{
+              pointerEvents: "all",
+              cursor: "grab",
+              touchAction: "none",
+            }}
             onMouseDown={handleMouseDown(node)}
             onTouchStart={handleMouseDown(node)}
           />
         ))}
       </svg>
 
-      {/* Main Content */}
+      {/* === MAIN CONTENT === */}
       <main
         style={{
           maxWidth: "900px",
@@ -308,21 +341,6 @@ const Intro02 = ({ isDarkMode, toggleTheme }) => {
           Visual Designer & Developer
         </h1>
 
-        {/*
-        <p
-          style={{
-            fontSize: isMobile ? "1.25rem" : "1.45rem",
-            lineHeight: "1.8",
-            color: isDarkMode ? "#cbd5e1" : "#475569",
-            maxWidth: "740px",
-            margin: "0 auto 3.5rem",
-            opacity: 0.95,
-          }}
-        >
-          I create videos, websites, apps, brands, and digital experiences.
-        </p> 
-        */}
-
         <div
           style={{
             fontSize: isMobile ? "1.25rem" : "1.45rem",
@@ -335,12 +353,11 @@ const Intro02 = ({ isDarkMode, toggleTheme }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: "0.35em", // only between "I create" and the rotating word
+            gap: "0.35em",
           }}
         >
           <span style={{ fontWeight: "600" }}>I create</span>
 
-          {/* Rotating container */}
           <span
             style={{
               position: "relative",
@@ -348,7 +365,6 @@ const Intro02 = ({ isDarkMode, toggleTheme }) => {
               height: "1.6em",
               alignItems: "center",
               overflow: "hidden",
-              // No minWidth, no extra gaps
             }}
           >
             {[
@@ -362,12 +378,12 @@ const Intro02 = ({ isDarkMode, toggleTheme }) => {
             ))}
           </span>
 
-          {/* The period — glued directly to the rotating word */}
           <span style={{ marginLeft: "-0.4em" }}>.</span>
         </div>
 
+        {/* === VIEW PROJECTS BUTTON – Now uses same smooth scroll === */}
         <button
-          onClick={toggleTheme}
+          onClick={() => onViewProjects?.()}
           style={{
             padding: "1.2rem 3.2rem",
             fontSize: "1.2rem",
@@ -396,6 +412,8 @@ const Intro02 = ({ isDarkMode, toggleTheme }) => {
       </main>
     </section>
   );
-};
+});
+
+Intro02.displayName = "Intro02"; // For React devtools
 
 export default Intro02;

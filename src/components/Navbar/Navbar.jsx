@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-const Navbar = ({ isDarkMode, toggleTheme }) => {
+const Navbar = ({ isDarkMode, toggleTheme, scrollToSection, sections }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 750);
 
+  // === HANDLE RESIZE & AUTO-CLOSE MOBILE MENU ON DESKTOP ===
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth <= 750;
@@ -15,8 +16,23 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, [menuOpen]);
 
+  // === NAV ITEMS CONFIG (Maps label → ref) ===
+  const navItems = [
+    { label: "Home", ref: sections.homeRef },
+    { label: "Projects", ref: sections.projectsRef },
+    { label: "About", ref: sections.aboutRef },
+    { label: "Contact", ref: sections.contactRef },
+  ];
+
+  // === HANDLE NAV CLICK (Scroll + Close mobile menu) ===
+  const handleNavClick = (ref) => {
+    scrollToSection(ref);
+    if (isMobile) setMenuOpen(false);
+  };
+
   return (
     <>
+      {/* === ANIMATIONS & HOVER STYLES === */}
       <style jsx>{`
         @keyframes slideDown {
           from {
@@ -31,6 +47,11 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
         .nav-link {
           position: relative;
           transition: all 0.3s ease;
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-size: inherit;
+          font-family: inherit;
         }
         .nav-link:hover {
           color: var(--accent) !important;
@@ -65,14 +86,14 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
         }
       `}</style>
 
+      {/* === MAIN NAVBAR (Fixed at top) === */}
       <nav
         style={{
-          //background: "var(--bg)",
-          //backdropFilter: "blur(16px)",
           background: isDarkMode
-            ? "rgba(15, 23, 42, 0.98)" // Dark mode: deep slate with high opacity
-            : "rgba(255, 255, 255, 0.98)", // Light mode: white with high opacity
+            ? "rgba(15, 23, 42, 0.98)"
+            : "rgba(255, 255, 255, 0.98)",
           WebkitBackdropFilter: "blur(16px)",
+          backdropFilter: "blur(16px)",
           borderBottom: `1px solid var(--border)`,
           padding: "1.2rem 6%",
           display: "flex",
@@ -86,9 +107,9 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
           fontFamily: `'Inter', system-ui, sans-serif`,
           color: "var(--text)",
           boxShadow: "var(--shadow)",
-          transition: "all 0.4s ease",
         }}
       >
+        {/* === LOGO / NAME === */}
         <div
           style={{
             fontSize: "1.8rem",
@@ -103,24 +124,24 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
           Arun Chacko
         </div>
 
+        {/* === DESKTOP NAV LINKS === */}
         {!isMobile && (
           <div style={{ display: "flex", gap: "3rem", alignItems: "center" }}>
-            {["Home", "Projects", "About", "Contact"].map((item) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
+            {navItems.map((item) => (
+              <button
+                key={item.label}
+                onClick={() => handleNavClick(item.ref)}
                 className="nav-link"
                 style={{
                   color: "var(--text)",
-                  textDecoration: "none",
                   fontWeight: 500,
                 }}
               >
-                {item}
-              </a>
+                {item.label}
+              </button>
             ))}
 
-            {/* Dark/Light Mode Toggle Button – works perfectly in both modes */}
+            {/* === DARK MODE TOGGLE === */}
             <button
               onClick={toggleTheme}
               style={{
@@ -129,7 +150,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                 fontSize: "1.65rem",
                 cursor: "pointer",
                 padding: "8px",
-                color: isDarkMode ? "#e2e8f0" : "#1e293b", // ← This fixes black icon in dark mode
+                color: isDarkMode ? "#e2e8f0" : "#1e293b",
                 filter: isDarkMode ? "none" : "brightness(0.9)",
                 transition: "all 0.3s ease",
               }}
@@ -140,6 +161,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
           </div>
         )}
 
+        {/* === MOBILE: TOGGLE + HAMBURGER === */}
         {isMobile && (
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             <button
@@ -150,11 +172,10 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                 fontSize: "1.65rem",
                 cursor: "pointer",
                 padding: "8px",
-                color: isDarkMode ? "#e2e8f0" : "#1e293b", // ← This fixes black icon in dark mode
+                color: isDarkMode ? "#e2e8f0" : "#1e293b",
                 filter: isDarkMode ? "none" : "brightness(0.9)",
                 transition: "all 0.3s ease",
               }}
-              aria-label="Toggle dark mode"
             >
               {isDarkMode ? "☀" : "☾"}
             </button>
@@ -176,6 +197,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
           </div>
         )}
 
+        {/* === MOBILE MENU (Dropdown) === */}
         {isMobile && menuOpen && (
           <div
             style={{
@@ -183,18 +205,17 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
               top: "100%",
               left: 0,
               right: 0,
-              // This is the key fix:
               background: isDarkMode
-                ? "rgba(15, 23, 42, 0.98)" // Dark mode: deep slate with high opacity
-                : "rgba(255, 255, 255, 0.98)", // Light mode: white with high opacity
+                ? "rgba(15, 23, 42, 0.98)"
+                : "rgba(255, 255, 255, 0.98)",
               backdropFilter: "blur(20px)",
               WebkitBackdropFilter: "blur(20px)",
               padding: "2.5rem 6%",
               borderTop: `1px solid var(--border)`,
               boxShadow:
-                "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                "0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)",
               animation: "slideDown 0.4s ease-out",
-              zIndex: 999, // Ensure it's below navbar but above page content
+              zIndex: 999,
             }}
           >
             <div
@@ -205,27 +226,25 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                 alignItems: "center",
               }}
             >
-              {["Home", "Projects", "About", "Contact"].map((item, i) => (
-                <a
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  onClick={() => setMenuOpen(false)}
+              {navItems.map((item, i) => (
+                <button
+                  key={item.label}
+                  onClick={() => handleNavClick(item.ref)}
                   style={{
                     color: "var(--text)",
-                    textDecoration: "none",
+                    background: "none",
+                    border: "none",
                     fontSize: "1.6rem",
                     fontWeight: 600,
-                    transition: "all 0.3s ease",
+                    cursor: "pointer",
                     opacity: 0,
                     animation: `slideDown 0.4s ease-out ${
                       i * 0.1 + 0.2
                     }s forwards`,
-                    position: "relative",
-                    zIndex: 1,
                   }}
                 >
-                  {item}
-                </a>
+                  {item.label}
+                </button>
               ))}
             </div>
           </div>
@@ -235,6 +254,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
   );
 };
 
+// === HAMBURGER LINE STYLES ===
 const lineStyle = (isDarkMode) => ({
   display: "block",
   width: "30px",
