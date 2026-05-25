@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import loveThumbnail from "../../assets/projects/cover-image-love.jpg";
+import kommunicateThumbnail from "../../assets/projects/cover-image-kommunicate.jpg";
+import gamesThumbnail from "../../assets/projects/cover-image-games.jpg";
 
 const Projects = ({ isDarkMode }) => {
   const [windowWidth, setWindowWidth] = useState(
@@ -15,18 +18,20 @@ const Projects = ({ isDarkMode }) => {
 
   const projects = [
     {
-      title: "Online Cinema",
-      date: "September 2023",
-      tags: ["Design", "Web"],
-      desc: "A feature-rich platform for streaming movies and TV shows. Includes user authentication, personalized recommendations, watchlists, and responsive design.",
-      tech: "React, Node.js, MongoDB",
+      title: "Languages of Love",
+      date: "May 2020",
+      tags: ["Motion graphics", "Visual storytelling"],
+      desc: "Personal motion graphics project featuring fluid 2D animation and expressive illustrations that narrates a heartfelt story of love, rejection, and growth through clean minimalist design.",
+      tech: "After Effects, Photoshop, Illustrator",
+      image: loveThumbnail,
     },
     {
-      title: "E-Shop",
-      date: "August 2024",
-      tags: ["E-commerce", "Tech"],
-      desc: "A modern online shop for electronic devices with clean UI and secure payment integration. Features include advanced product filtering, dynamic cart updates, and admin dashboard.",
-      tech: "Next.js, Tailwind CSS, Stripe API",
+      title: "Kommunicate",
+      date: "January 2026",
+      tags: ["Figma","UX","PowerApps"],
+      desc: "End-to-end PowerApp solution for workflow management. Designed and developed Kommunicate to streamline communication requests, tracking, and collaboration using Microsoft Power Platform.",
+      tech: "Figma,PowerApps, PowerAutomate, SharePoint",
+      image: kommunicateThumbnail,
     },
     {
       title: "Games Forum",
@@ -34,6 +39,7 @@ const Projects = ({ isDarkMode }) => {
       tags: ["Games", "Social Media"],
       desc: "A community-driven forum for gamers to discuss, share, and connect. Includes real-time chat, post moderation, and a ranking system to highlight active contributors.",
       tech: "Angular, Firebase, WebSocket",
+      image: gamesThumbnail,
     },
   ];
 
@@ -78,7 +84,8 @@ const Projects = ({ isDarkMode }) => {
                       alignItems: "center",
                     }}
                   >
-                    <ImagePlaceholder />
+                    <ProjectImage image={project.image} />
+                    
                     <TextContent
                       project={project}
                       isMobile={true}
@@ -98,7 +105,8 @@ const Projects = ({ isDarkMode }) => {
                       direction: imageOnLeft ? "ltr" : "rtl", // This is the magic
                     }}
                   >
-                    <ImagePlaceholder />
+                    <ProjectImage image={project.image} />
+                    
                     <TextContent
                       project={project}
                       isMobile={false}
@@ -115,8 +123,11 @@ const Projects = ({ isDarkMode }) => {
   );
 };
 
-// Reusable Image Placeholder
-const ImagePlaceholder = () => (
+
+
+
+
+const ProjectImage = ({ image }) => (
   <div
     style={{
       width: "100%",
@@ -127,10 +138,9 @@ const ImagePlaceholder = () => (
       border: "1px solid rgba(139,92,246,0.2)",
       position: "relative",
       overflow: "hidden",
-      // Uncomment when ready:
-      // backgroundImage: `url(/images/projects/your-image.jpg)`,
-      // backgroundSize: "cover",
-      // backgroundPosition: "center",
+      backgroundImage: `url(${image})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
     }}
   >
     <div
@@ -154,10 +164,17 @@ const ImagePlaceholder = () => (
         letterSpacing: "8px",
       }}
     >
-      PROJECT
+      {/* PROJECT NAME */}
     </div>
   </div>
 );
+
+
+
+
+
+// Reusable Image Placeholder
+
 
 // Reusable Text Content
 const TextContent = ({ project, isMobile, isDarkMode }) => (
@@ -166,6 +183,8 @@ const TextContent = ({ project, isMobile, isDarkMode }) => (
       maxWidth: "560px",
       textAlign: isMobile ? "center" : "left",
       padding: isMobile ? "0 1rem" : 0,
+      // Grid uses direction: rtl to swap columns; keep text LTR so tags align with heading
+      direction: "ltr",
     }}
   >
     <div
@@ -192,6 +211,7 @@ const TextContent = ({ project, isMobile, isDarkMode }) => (
               : "rgba(109,40,217,0.05)",
             color: "var(--text)",
             fontWeight: 500,
+            //justifyContent: isMobile ? "center" : "flex-start",
           }}
         >
           {tag}
@@ -225,7 +245,7 @@ const TextContent = ({ project, isMobile, isDarkMode }) => (
     <p
       style={{ fontSize: "0.98rem", opacity: 0.75, margin: "1.4rem 0 2.2rem" }}
     >
-      Technologies:{" "}
+      Tools:{" "}
       <strong style={{ color: "var(--accent)" }}>{project.tech}</strong>
     </p>
 
