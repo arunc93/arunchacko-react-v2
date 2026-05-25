@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom"; // ← Added this
 import loveThumbnail from "../../assets/projects/cover-image-love.jpg";
 import kommunicateThumbnail from "../../assets/projects/cover-image-kommunicate.jpg";
-import gamesThumbnail from "../../assets/projects/cover-image-games.jpg";
+import chackomashThumbnail from "../../assets/projects/cover-image-chackomash.jpg";
 
 const Projects = ({ isDarkMode }) => {
   const [windowWidth, setWindowWidth] = useState(
@@ -24,6 +25,8 @@ const Projects = ({ isDarkMode }) => {
       desc: "Personal motion graphics project featuring fluid 2D animation and expressive illustrations that narrates a heartfelt story of love, rejection, and growth through clean minimalist design.",
       tech: "After Effects, Photoshop, Illustrator",
       image: loveThumbnail,
+      url: "https://youtu.be/U27Ndol6k8g",   // Change this to your desired internal route
+      isExternal: true,
     },
     {
       title: "Kommunicate",
@@ -32,14 +35,18 @@ const Projects = ({ isDarkMode }) => {
       desc: "End-to-end PowerApp solution for workflow management. Designed and developed Kommunicate to streamline communication requests, tracking, and collaboration using Microsoft Power Platform.",
       tech: "Figma,PowerApps, PowerAutomate, SharePoint",
       image: kommunicateThumbnail,
+      url: "https://www.behance.net/gallery/231584073/Kommunicate-Platform", // ← Put your external link here
+      isExternal: true,
     },
     {
-      title: "Games Forum",
-      date: "December 2024",
-      tags: ["Games", "Social Media"],
-      desc: "A community-driven forum for gamers to discuss, share, and connect. Includes real-time chat, post moderation, and a ranking system to highlight active contributors.",
-      tech: "Angular, Firebase, WebSocket",
-      image: gamesThumbnail,
+      title: "Social media branding",
+      date: "May 2026",
+      tags: ["Branding", "Social Media"],
+      desc: "Created and managed @ChackoMashPPT, an AI-powered YouTube channel specializing in engaging PowerPoint tutorials. Directed content strategy, storytelling, editing, and overall production.",
+      tech: "PowerPoint, After Effects, Photoshop",
+      image: chackomashThumbnail,
+      url: "https://www.youtube.com/@ChackoMashPPT/shorts",
+      isExternal: true,
     },
   ];
 
@@ -102,7 +109,7 @@ const Projects = ({ isDarkMode }) => {
                       gridTemplateColumns: "540px 1fr",
                       gap: "6rem",
                       alignItems: "center",
-                      direction: imageOnLeft ? "ltr" : "rtl", // This is the magic
+                      direction: imageOnLeft ? "ltr" : "rtl",
                     }}
                   >
                     <ProjectImage image={project.image} />
@@ -122,10 +129,6 @@ const Projects = ({ isDarkMode }) => {
     </section>
   );
 };
-
-
-
-
 
 const ProjectImage = ({ image }) => (
   <div
@@ -169,111 +172,113 @@ const ProjectImage = ({ image }) => (
   </div>
 );
 
-
-
-
-
-// Reusable Image Placeholder
-
-
 // Reusable Text Content
-const TextContent = ({ project, isMobile, isDarkMode }) => (
-  <div
-    style={{
-      maxWidth: "560px",
-      textAlign: isMobile ? "center" : "left",
-      padding: isMobile ? "0 1rem" : 0,
-      // Grid uses direction: rtl to swap columns; keep text LTR so tags align with heading
-      direction: "ltr",
-    }}
-  >
+const TextContent = ({ project, isMobile, isDarkMode }) => {
+  const ButtonComponent = project.isExternal ? "a" : Link;
+
+  return (
     <div
       style={{
-        marginBottom: "1rem",
-        display: "flex",
-        gap: "0.8rem",
-        flexWrap: "wrap",
-        justifyContent: isMobile ? "center" : "flex-start",
+        maxWidth: "560px",
+        textAlign: isMobile ? "center" : "left",
+        padding: isMobile ? "0 1rem" : 0,
+        direction: "ltr",
       }}
     >
-      {project.tags.map((tag) => (
-        <span
-          key={tag}
-          style={{
-            fontSize: "0.85rem",
-            padding: "0.5rem 1.2rem",
-            borderRadius: "30px",
-            border: `1px solid ${
-              isDarkMode ? "rgba(139,92,246,0.4)" : "rgba(109,40,217,0.3)"
-            }`,
-            background: isDarkMode
-              ? "rgba(139,92,246,0.1)"
-              : "rgba(109,40,217,0.05)",
-            color: "var(--text)",
-            fontWeight: 500,
-            //justifyContent: isMobile ? "center" : "flex-start",
-          }}
-        >
-          {tag}
-        </span>
-      ))}
+      <div
+        style={{
+          marginBottom: "1rem",
+          display: "flex",
+          gap: "0.8rem",
+          flexWrap: "wrap",
+          justifyContent: isMobile ? "center" : "flex-start",
+        }}
+      >
+        {project.tags.map((tag) => (
+          <span
+            key={tag}
+            style={{
+              fontSize: "0.85rem",
+              padding: "0.5rem 1.2rem",
+              borderRadius: "30px",
+              border: `1px solid ${
+                isDarkMode ? "rgba(139,92,246,0.4)" : "rgba(109,40,217,0.3)"
+              }`,
+              background: isDarkMode
+                ? "rgba(139,92,246,0.1)"
+                : "rgba(109,40,217,0.05)",
+              color: "var(--text)",
+              fontWeight: 500,
+            }}
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      <h3
+        style={{
+          fontSize: "2.6rem",
+          fontWeight: 700,
+          margin: "0.5rem 0 0.4rem",
+          lineHeight: 1.1,
+        }}
+      >
+        {project.title}
+      </h3>
+      <p style={{ fontSize: "1rem", opacity: 0.7, marginBottom: "1.4rem" }}>
+        {project.date}
+      </p>
+      <p
+        style={{
+          fontSize: "1.18rem",
+          lineHeight: "1.8",
+          margin: "1.6rem 0",
+          opacity: 0.92,
+        }}
+      >
+        {project.desc}
+      </p>
+      <p
+        style={{ fontSize: "0.98rem", opacity: 0.75, margin: "1.4rem 0 2.2rem" }}
+      >
+        Tools:{" "}
+        <strong style={{ color: "var(--accent)" }}>{project.tech}</strong>
+      </p>
+
+      <ButtonComponent
+        href={project.isExternal ? project.url : undefined}
+        to={!project.isExternal ? project.url : undefined}
+        target={project.isExternal ? "_blank" : undefined}
+        rel={project.isExternal ? "noopener noreferrer" : undefined}
+        style={{
+          padding: "0.95rem 2.6rem",
+          fontSize: "1.12rem",
+          fontWeight: 600,
+          border: "none",
+          borderRadius: "50px",
+          background: "var(--gradient)",
+          color: "white",
+          cursor: "pointer",
+          boxShadow: "0 10px 30px rgba(109,40,217,0.3)",
+          transition: "all 0.3s ease",
+          display: "inline-block",
+          textDecoration: "none",
+          textAlign: "center",
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.transform = "translateY(-5px)";
+          e.target.style.boxShadow = "0 18px 40px rgba(109,40,217,0.4)";
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.transform = "translateY(0)";
+          e.target.style.boxShadow = "0 10px 30px rgba(109,40,217,0.3)";
+        }}
+      >
+        See more
+      </ButtonComponent>
     </div>
-
-    <h3
-      style={{
-        fontSize: "2.6rem",
-        fontWeight: 700,
-        margin: "0.5rem 0 0.4rem",
-        lineHeight: 1.1,
-      }}
-    >
-      {project.title}
-    </h3>
-    <p style={{ fontSize: "1rem", opacity: 0.7, marginBottom: "1.4rem" }}>
-      {project.date}
-    </p>
-    <p
-      style={{
-        fontSize: "1.18rem",
-        lineHeight: "1.8",
-        margin: "1.6rem 0",
-        opacity: 0.92,
-      }}
-    >
-      {project.desc}
-    </p>
-    <p
-      style={{ fontSize: "0.98rem", opacity: 0.75, margin: "1.4rem 0 2.2rem" }}
-    >
-      Tools:{" "}
-      <strong style={{ color: "var(--accent)" }}>{project.tech}</strong>
-    </p>
-
-    <button
-      style={{
-        padding: "0.95rem 2.6rem",
-        fontSize: "1.12rem",
-        fontWeight: 600,
-        border: "none",
-        borderRadius: "50px",
-        background: "var(--gradient)",
-        color: "white",
-        cursor: "pointer",
-        boxShadow: "0 10px 30px rgba(109,40,217,0.3)",
-        transition: "all 0.3s ease",
-      }}
-      onMouseEnter={(e) => {
-        e.target.style.transform = "translateY(-5px)";
-        e.target.style.boxShadow = "0 18px 40px rgba(109,40,217,0.4)";
-      }}
-      onMouseLeave={(e) => {
-        e.target.style.transform = "translateY(0)";
-        e.target.style.boxShadow = "0 10px 30px rgba(109,40,217,0.3)";
-      }}
-    >
-      See more
-    </button>
-  </div>
-);
+  );
+};
 
 export default Projects;
