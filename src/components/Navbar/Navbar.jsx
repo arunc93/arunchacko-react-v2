@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = ({ isDarkMode, toggleTheme, scrollToSection, sections }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 750);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // === HANDLE RESIZE & AUTO-CLOSE MOBILE MENU ON DESKTOP ===
   useEffect(() => {
@@ -18,15 +21,29 @@ const Navbar = ({ isDarkMode, toggleTheme, scrollToSection, sections }) => {
 
   // === NAV ITEMS CONFIG (Maps label → ref) ===
   const navItems = [
-    { label: "Home", ref: sections.homeRef },
-    { label: "Projects", ref: sections.projectsRef },
-    { label: "About", ref: sections.aboutRef },
-    { label: "Contact", ref: sections.contactRef },
+    { label: "Home", route: "/", ref: sections.homeRef },
+    { label: "Projects", ref: sections.projectsRef, scrollKey: "projectsRef" },
+    { label: "About", ref: sections.aboutRef, scrollKey: "aboutRef" },
+    { label: "Blog", route: "/blogs" },
+    { label: "Contact", ref: sections.contactRef, scrollKey: "contactRef" },
   ];
 
   // === HANDLE NAV CLICK (Scroll + Close mobile menu) ===
-  const handleNavClick = (ref) => {
-    scrollToSection(ref);
+  const handleNavClick = (item) => {
+    if (item.route) {
+      if (item.route === "/" && location.pathname === "/" && item.ref) {
+        scrollToSection(item.ref);
+      } else {
+        navigate(item.route);
+      }
+    } else if (item.ref) {
+      if (location.pathname === "/") {
+        scrollToSection(item.ref);
+      } else {
+        navigate("/", { state: { scrollTo: item.scrollKey } });
+      }
+    }
+
     if (isMobile) setMenuOpen(false);
   };
 
@@ -130,7 +147,7 @@ const Navbar = ({ isDarkMode, toggleTheme, scrollToSection, sections }) => {
             {navItems.map((item) => (
               <button
                 key={item.label}
-                onClick={() => handleNavClick(item.ref)}
+                onClick={() => handleNavClick(item)}
                 className="nav-link"
                 style={{
                   color: "var(--text)",
@@ -229,7 +246,7 @@ const Navbar = ({ isDarkMode, toggleTheme, scrollToSection, sections }) => {
               {navItems.map((item, i) => (
                 <button
                   key={item.label}
-                  onClick={() => handleNavClick(item.ref)}
+                  onClick={() => handleNavClick(item)}
                   style={{
                     color: "var(--text)",
                     background: "none",
