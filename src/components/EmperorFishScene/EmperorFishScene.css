@@ -1,0 +1,20 @@
+/* Foreground 3D layer: scoped to its parent hero section,
+   sits above hero text, never captures clicks. */
+.emperor-fish-layer {
+  position: absolute;
+  inset: 0;
+  top: 35%;          /* push the scene down; raise this % to go lower */
+  width: 100%;
+  height: 100%;
+  z-index: 20; /* Above hero content (z-index 10), clipped to the Intro03 section. */
+  pointer-events: none;
+  background: transparent;
+}
+
+.emperor-fish-layer canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: transparent;
+}

@@ -24,7 +24,7 @@ const Navbar = ({ isDarkMode, toggleTheme, scrollToSection, sections }) => {
     { label: "Home", route: "/", ref: sections.homeRef },
     { label: "Projects", ref: sections.projectsRef, scrollKey: "projectsRef" },
     { label: "About", ref: sections.aboutRef, scrollKey: "aboutRef" },
-    { label: "Blog", route: "/blogs" },
+   // { label: "Blog", route: "/blogs" },
     { label: "Contact", ref: sections.contactRef, scrollKey: "contactRef" },
   ];
 

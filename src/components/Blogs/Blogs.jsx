@@ -320,8 +320,23 @@ const Blogs = ({ isDarkMode }) => {
                 boxShadow: isDarkMode
                   ? "0 10px 30px rgba(15, 23, 42, 0.35)"
                   : "0 10px 30px rgba(15, 23, 42, 0.08)",
-                transition: "transform 0.25s ease, box-shadow 0.25s ease",
+                transition:
+                  "transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease",
                 display: "block",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-4px)";
+                e.currentTarget.style.borderColor = "rgba(139, 92, 246, 0.45)";
+                e.currentTarget.style.boxShadow = isDarkMode
+                  ? "0 16px 40px rgba(139, 92, 246, 0.28)"
+                  : "0 16px 40px rgba(109, 40, 217, 0.18)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.borderColor = "rgba(148, 163, 184, 0.25)";
+                e.currentTarget.style.boxShadow = isDarkMode
+                  ? "0 10px 30px rgba(15, 23, 42, 0.35)"
+                  : "0 10px 30px rgba(15, 23, 42, 0.08)";
               }}
             >
               <img

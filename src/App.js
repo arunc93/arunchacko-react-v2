@@ -2,12 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar.jsx";
-import Intro02 from "./components/Intro02/Intro02.jsx";
+import Intro03 from "./components/Intro03/Intro03.jsx";
 import Experience from "./components/Experience/Experience.jsx";
 import Projects from "./components/Projects/Projects.jsx";
 import Skills from "./components/Skills/Skills.jsx";
 import HireMe from "./components/HireMe/HireMe.jsx";
-import Blogs from "./components/Blogs/Blogs.jsx";
+//import Blogs from "./components/Blogs/Blogs.jsx";
+
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -70,6 +71,7 @@ function App() {
         scrollToSection={scrollToSection}
         sections={{ homeRef, projectsRef, aboutRef, contactRef }}
       />
+      
       <Routes>
         <Route
           path="/"
@@ -77,7 +79,7 @@ function App() {
             <>
               {/* === HOME / INTRO SECTION === */}
               <div ref={homeRef}>
-                <Intro02 isDarkMode={isDarkMode} onViewProjects={scrollToProjects} />
+                <Intro03 isDarkMode={isDarkMode} onViewProjects={scrollToProjects} />
               </div>
 
               {/* === EXPERIENCE SECTION === */}
@@ -100,8 +102,13 @@ function App() {
             </>
           }
         />
+        {/* === BLOGS SECTION HIDDEN FOR NOW=== 
+
         <Route path="/blogs" element={<Blogs isDarkMode={isDarkMode} />} />
         <Route path="/blogs/:blogId" element={<Blogs isDarkMode={isDarkMode} />} />
+        
+        */}
+        
       </Routes>
     </div>
   );
